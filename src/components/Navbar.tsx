@@ -1,6 +1,6 @@
 
 
-export default function () {
+function Navbar () {
     return <>
         <div className="fixed w-full h-1 z-40 bg-custom-blue-sky"></div>
         <div className="shadow-sm z-30 w-full fixed flex bg-white justify-center pb-5">
@@ -18,3 +18,5 @@ export default function () {
         </div>
     </>
 }
+
+export default Navbar;
