@@ -11,9 +11,9 @@ export default function Home() {
       <BigNews />
       <div className="mb-10"></div>
 
-      <NewsList />
+      <NewsList title="Populer"/>
       <div className="mb-10"></div>
-      <NewsList />
+      <NewsList title="Terbaru"/>
       <div className="mb-10"></div>
 
       
