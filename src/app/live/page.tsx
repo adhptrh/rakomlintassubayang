@@ -2,11 +2,18 @@
 import Navbar from "../../components/Navbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faVolumeHigh, faVolumeXmark } from "@fortawesome/free-solid-svg-icons";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Live() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [sidebarVisible, setSidebarVisible] = useState(false)
+
+  useEffect(()=>{
+    if (localStorage.getItem("sidebar") == "open") {
+      setSidebarVisible(true)
+    }
+  }, [])
 
   const togglePlay = () => {
     const audio:HTMLAudioElement = document.getElementById("liveaudio") as HTMLAudioElement
@@ -20,7 +27,7 @@ export default function Live() {
 
   return (
     <main className="flex flex-col min-h-screen items-center">
-      <Navbar />
+      <Navbar burgerOnClick={() => { setSidebarVisible(!sidebarVisible) }} />
       <div className="w-full flex flex-col items-center h-screen">
         <div className="h-[80px] w-full">
         </div>

@@ -1,12 +1,26 @@
+"use client"
+
 import Image from "next/image";
 import Navbar from "../../components/Navbar";
 import BigNews from "../../components/BigNews";
 import NewsList from "@/components/NewsList";
+import { useEffect, useState } from "react";
+import Sidebar from "@/components/Sidebar";
 
 export default function Live() {
-  return (
+  
+  const [sidebarVisible, setSidebarVisible] = useState(false)
+  
+  useEffect(()=>{
+    if (localStorage.getItem("sidebar") == "open") {
+      setSidebarVisible(true)
+    }
+  }, [])
+
+  return (<>
+    <Sidebar setSidebarVisible={setSidebarVisible} sidebarVisible={sidebarVisible}></Sidebar>
     <main className="flex flex-col min-h-screen items-center">
-      <Navbar />
+      <Navbar burgerOnClick={() => { setSidebarVisible(!sidebarVisible) }} />
       <div className="w-full h-[80px]"></div>
         <div className="container px-5 flex w-full flex-col min-h-screen">
           <div>
@@ -28,5 +42,6 @@ export default function Live() {
       </div>
 
     </main>
+  </>
   );
 }

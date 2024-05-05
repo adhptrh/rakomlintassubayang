@@ -1,4 +1,46 @@
 @tailwind base;
+
+@layer base {
+  h1 {
+    display: block;
+    font-size: 2em;  /* Roughly equivalent to 24px */
+    margin-top: 0.67em;
+    margin-bottom: 0.67em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+  }
+  
+  h2 {
+    display: block;
+    font-size: 1.5em;  /* Roughly equivalent to 18px */
+    margin-top: 0.83em;
+    margin-bottom: 0.83em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+  }
+  
+  h3 {
+    display: block;
+    font-size: 1.17em;  /* Roughly equivalent to 16px */
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+  }
+  
+  p {
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+}
+
 @tailwind components;
 @tailwind utilities;
 
@@ -16,7 +58,6 @@
   }
 }
  */
-
 body {''
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
