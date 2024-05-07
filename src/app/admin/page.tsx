@@ -1,7 +1,7 @@
 "use client"
 
 import config from '@/config';
-import { AppShell, Burger, Button, Group, Skeleton, Table, Modal, TextInput, FileInput } from '@mantine/core';
+import { AppShell, Burger, Button, Group, Skeleton, Table, Modal, TextInput, FileInput, Combobox, useCombobox, InputBase, Input } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useRouter } from 'next/navigation';
 import { Router } from 'next/router';
@@ -16,10 +16,17 @@ import { Color } from '@tiptap/extension-color';
 import TextStyle from '@tiptap/extension-text-style';
 import { notifications } from '@mantine/notifications';
 
+type Category = {
+    id: number
+}
+
 type Post = {
     id: number
     title: string
-    description: string
+    contentHTML: string
+    contentText: string
+    category: Category,
+    created_at: string,
     thumbnail: string
 }
 
@@ -30,6 +37,13 @@ type postResponse = {
     ]
 }
 
+type CategoryMap = {
+    [key: string]: string;
+};
+type CategoryReverse = {
+    [key: string]: string;
+};
+
 export default function Admin() {
     const [opened, { toggle }] = useDisclosure();
     const [modalOpened, modal] = useDisclosure(false);
@@ -39,19 +53,51 @@ export default function Admin() {
     const [nama, setNama] = useState('')
     const [deleteSelect, setDeleteSelect] = useState(0)
     const [editSelect, setEditSelect] = useState(0)
+    const [comboboxVal, setComboboxVal] = useState<string>("");
+    const [comboboxEditVal, setComboboxEditVal] = useState<string>("");
+
+    const categoryMap: CategoryMap = {
+        "1": "Khabar Desa",
+        "2": "Event",
+        "3": "Program",
+        "4": "Berita",
+    }
+
+    const categoryMapReverse: CategoryReverse = {
+        "Khabar Desa": "1",
+        "Event": "2",
+        "Program": "3",
+        "Berita": "4",
+    }
+
+    const combobox = useCombobox({
+        onDropdownClose: () => combobox.resetSelectedOption(),
+    })
+
+    const comboboxEdit = useCombobox({
+        onDropdownClose: () => comboboxEdit.resetSelectedOption(),
+    })
+
     const [posts, setPosts] = useState([{
-        id:0,
-        title:"",
-        description:"",
-        thumbnail:""
+        id: 0,
+        title: "",
+        contentHTML: "",
+        contentText: "",
+        category: {
+            id:0,
+        },
+        thumbnail: "",
+        created_at: ""
     }])
 
     const postForm = useForm({
         mode: 'uncontrolled',
         initialValues: {
             title: "",
-            content: "",
-            thumbnail: new File([],'')
+            contentHTML: "",
+            contentText: "",
+            category: 0,
+            thumbnail: new File([], '')
         }
     })
 
@@ -59,8 +105,10 @@ export default function Admin() {
         mode: 'uncontrolled',
         initialValues: {
             title: "",
-            content: "",
-            thumbnail: new File([],'')
+            contentHTML: "",
+            contentText: "",
+            category: 0,
+            thumbnail: new File([], '')
         }
     })
 
@@ -89,7 +137,7 @@ export default function Admin() {
             method: "DELETE",
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("token"),
-                "Accept":"appllication/json"
+                "Accept": "appllication/json"
             }
         })
 
@@ -137,7 +185,7 @@ export default function Admin() {
             StarterKit,
             Underline,
             Color,
-            TextStyle
+            TextStyle,
         ],
         content: ""
     })
@@ -170,20 +218,36 @@ export default function Admin() {
                     fdata.append("thumbnail", val.thumbnail)
                     fdata.append("title", val.title)
                     if (editor) {
-                        let ok = editor.getHTML()
-                        fdata.append("content", ok)
+                        fdata.append("contentHTML", editor.getHTML())
+                        fdata.append("contentText", editor.getText())
                     }
-                    await fetch(config.API_URL + "/posts", {
+                    fdata.append("category", comboboxVal)
+                    const resp = await fetch(config.API_URL + "/posts", {
                         method: "POST",
                         headers: {
                             Authorization: "Bearer " + localStorage.getItem("token")
                         },
                         body: fdata
                     })
+
+                    if (resp.status == 200) {
+                        notifications.show({
+                            title: "Berhasil",
+                            message: "Berhasil memposting!",
+                            color: "green"
+                        })
+                        loadPosts()
+                    } else {
+                        notifications.show({
+                            title: "Gagal",
+                            message: "Gagal memposting",
+                            color: "red"
+                        })
+                    }
                 })}>
-                    <TextInput 
-                        className='mb-3' 
-                        label="Judul" 
+                    <TextInput
+                        className='mb-3'
+                        label="Judul"
                         placeholder="Isi judul"
                         key={postForm.key("title")}
                         {...postForm.getInputProps("title")}
@@ -196,6 +260,46 @@ export default function Admin() {
                         key={postForm.key("thumbnail")}
                         {...postForm.getInputProps("thumbnail")}
                     />
+                    <p>Jenis Postingan</p>
+                    <div className='mb-3'>
+                        <Combobox
+                            store={combobox}
+                            onOptionSubmit={(val) => {
+                                setComboboxVal(val);
+                                combobox.closeDropdown();
+                            }}
+                        >
+                            <Combobox.Target>
+                                <InputBase
+                                    component="button"
+                                    type="button"
+                                    pointer
+                                    rightSection={<Combobox.Chevron />}
+                                    rightSectionPointerEvents="none"
+                                    onClick={() => combobox.toggleDropdown()}
+                                >
+                                    {comboboxVal || <Input.Placeholder>Pilih Jenis Postingan</Input.Placeholder>}
+                                </InputBase>
+                            </Combobox.Target>
+
+                            <Combobox.Dropdown>
+                                <Combobox.Options>
+                                    <Combobox.Option value={"Khabar Desa"} key={"1"}>
+                                        Khabar Desa
+                                    </Combobox.Option>
+                                    <Combobox.Option value={"Event"} key={"2"}>
+                                        Event
+                                    </Combobox.Option>
+                                    <Combobox.Option value={"Program"} key={"3"}>
+                                        Program
+                                    </Combobox.Option>
+                                    <Combobox.Option value={"Berita"} key={"4"}>
+                                        Berita
+                                    </Combobox.Option>
+                                </Combobox.Options>
+                            </Combobox.Dropdown>
+                        </Combobox>
+                    </div>
                     <div>Konten</div>
                     <div className="mb-3">
                         <RichTextEditor editor={editor}>
@@ -248,60 +352,104 @@ export default function Admin() {
                             <RichTextEditor.Content onChange={(v) => { console.log(v) }} />
                         </RichTextEditor>
                     </div>
-                    <Button variant="gradient" type="submit">Post</Button>
+                    <Button variant="gradient" onClick={modal.close} type="submit">Post</Button>
                 </form>
             </Modal>
             <Modal opened={postEditModalOpened} onClose={postEditModal.close} title="Edit Postingan" centered size="100%">
                 <form onSubmit={postEditForm.onSubmit(async val => {
                     const fdata = new FormData()
-                    fdata.append("thumbnail", val.thumbnail)
+                    if (val.thumbnail != undefined) {
+                        fdata.append("thumbnail", val.thumbnail)
+                    }
                     fdata.append("title", val.title)
+                    fdata.append("category", categoryMapReverse[comboboxEditVal])
                     if (postEditEditor) {
-                        let ok = postEditEditor.getHTML()
-                        fdata.append("content", ok)
+                        fdata.append("contentHTML", postEditEditor.getHTML())
+                        fdata.append("contentText", postEditEditor.getText())
                     }
 
-                    let res = await fetch(config.API_URL + `/posts/${editSelect}`, {
-                        method: "PUT",
+                    let res = await fetch(config.API_URL + `/posts/${editSelect}?_method=PUT`, {
+                        method: "POST",
                         headers: {
                             Authorization: "Bearer " + localStorage.getItem("token"),
-                            Accept:"application/json",
-                            "Content-Type":"application/json"
+                            Accept: "application/json",
                         },
-                        body: JSON.stringify({title: val.title, content: postEditEditor?.getHTML()})
+                        body: fdata
+                        //body: JSON.stringify({ title: val.title, contentHTML: postEditEditor?.getHTML(), contentText: postEditEditor?.getText() })
                     })
 
                     if (res.status == 200) {
                         notifications.show({
-                            title:"Berhasil",
-                            color:"green",
-                            message:"Berhasil mengubah postingan."
+                            title: "Berhasil",
+                            color: "green",
+                            message: "Berhasil mengubah postingan."
                         })
                         loadPosts()
                     } else {
                         notifications.show({
-                            title:"Gagal",
-                            color:"red",
-                            message:"Gagal mengubah postingan."
+                            title: "Gagal",
+                            color: "red",
+                            message: "Gagal mengubah postingan."
                         })
                     }
                 })}>
-                    <TextInput 
-                        className='mb-3' 
-                        label="Judul" 
+                    <TextInput
+                        className='mb-3'
+                        label="Judul"
                         placeholder="Isi judul"
                         key={postEditForm.key("title")}
                         {...postEditForm.getInputProps("title")}
                     />
-                    {/* <FileInput
+                    <FileInput
                         className="mb-3"
                         label="Gambar"
                         accept="image/png,image/jpeg"
                         placeholder="Input gambar"
                         key={postEditForm.key("thumbnail")}
                         {...postEditForm.getInputProps("thumbnail")}
-                    /> */}
+                    />
+                    
+                    <p>Jenis Postingan</p>
+                    <div className='mb-3'>
+                        <Combobox
+                            store={comboboxEdit}
+                            onOptionSubmit={(val) => {
+                                setComboboxEditVal(val);
+                                comboboxEdit.closeDropdown();
+                            }}
+                        >
+                            <Combobox.Target>
+                                <InputBase
+                                    component="button"
+                                    type="button"
+                                    pointer
+                                    rightSection={<Combobox.Chevron />}
+                                    rightSectionPointerEvents="none"
+                                    onClick={() => comboboxEdit.toggleDropdown()}
+                                >
+                                    {comboboxEditVal || <Input.Placeholder>Pilih Jenis Postingan</Input.Placeholder>}
+                                </InputBase>
+                            </Combobox.Target>
 
+                            <Combobox.Dropdown>
+                                <Combobox.Options>
+                                    <Combobox.Option value={"Khabar Desa"} selected={comboboxVal == "1"}>
+                                        Khabar Desa
+                                    </Combobox.Option>
+                                    <Combobox.Option value={"Event"} selected={comboboxVal == "2"}>
+                                        Event
+                                    </Combobox.Option>
+                                    <Combobox.Option value={"Program"} selected={comboboxVal == "3"} >
+                                        Program
+                                    </Combobox.Option>
+                                    <Combobox.Option value={"Berita"} selected={comboboxVal == "4"}>
+                                        Berita
+                                    </Combobox.Option>
+                                </Combobox.Options>
+                            </Combobox.Dropdown>
+                        </Combobox>
+
+                    </div>
                     <div>Konten</div>
                     <div className="mb-3">
                         <RichTextEditor editor={postEditEditor}>
@@ -392,35 +540,37 @@ export default function Admin() {
                         <Table.Thead>
                             <Table.Tr>
                                 <Table.Th>No</Table.Th>
+                                <Table.Th>Tanggal Post</Table.Th>
                                 <Table.Th>Judul</Table.Th>
-                                <Table.Th>Gambar</Table.Th>
                                 <Table.Th>Aksi</Table.Th>
                             </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>
                             {posts.map((v, i) => <Table.Tr key={i}>
                                 <Table.Td>{i + 1}</Table.Td>
+                                <Table.Td>{new Date(v.created_at).toLocaleString()}</Table.Td>
                                 <Table.Td>{v.title}</Table.Td>
-                                <Table.Td></Table.Td>
                                 <Table.Td className="flex justify-end">
-                                    <Button 
-                                        color="orange" 
+                                    <Button
+                                        color="orange"
                                         className="mr-2"
-                                        onClick={()=>{
+                                        onClick={() => {
                                             setEditSelect(v.id)
-                                            postEditEditor?.commands.setContent(v.description)
-                                            console.log(v.description)
+                                            postEditEditor?.commands.setContent(v.contentHTML)
+                                            setComboboxEditVal(categoryMap[v.category.id])
                                             postEditForm.setValues({
                                                 title: v.title,
-                                                content: v.description
+                                                contentHTML: v.contentHTML,
+                                                contentText: v.contentText,
+                                                thumbnail: undefined
                                             })
                                             postEditModal.open()
                                         }}
                                     >Edit</Button>
 
-                                    <Button 
+                                    <Button
                                         color="red"
-                                        onClick={()=>{
+                                        onClick={() => {
                                             setDeleteSelect(v.id)
                                             cdelModal.open()
                                         }}

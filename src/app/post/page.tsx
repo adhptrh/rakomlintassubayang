@@ -1,22 +1,23 @@
 "use client"
 
+import "./style.css"
 import Image from "next/image";
 import Navbar from "../../components/Navbar";
 import BigNews from "../../components/BigNews";
 import NewsList from "@/components/NewsList";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import { useSearchParams } from 'next/navigation'
 import config from "@/config";
+import Footer from "@/components/Footer";
 
-export default function Live() {
-
+function Okay() {
   const searchParams = useSearchParams()
   const [sidebarVisible, setSidebarVisible] = useState(false)
   const [title, setTitle] = useState("")
   const [image, setImage] = useState("")
   const [content, setContent] = useState("")
-  const [date, setDate] = useState(new Date())
+  const [date, setDate] = useState("")
 
   async function loadData() {
     const resp = await fetch(config.API_URL + `/posts/${searchParams.get("id")}`, {
@@ -28,11 +29,10 @@ export default function Live() {
     if (resp.status == 200) {
       const jsonResp = await resp.json()
       setTitle(jsonResp.data.title)
-      setDate(new Date(jsonResp.data.created_at))
-      setContent(jsonResp.data.description)
+      setDate(new Date(jsonResp.data.created_at).toLocaleString())
+      setContent(jsonResp.data.contentHTML)
       setImage(jsonResp.data.thumbnail)
     }
-
   }
 
   useEffect(() => {
@@ -43,27 +43,31 @@ export default function Live() {
     loadData()
   }, [])
 
-  return (<>
-    <Sidebar setSidebarVisible={setSidebarVisible} sidebarVisible={sidebarVisible}></Sidebar>
+  return <>
+  <Sidebar setSidebarVisible={setSidebarVisible} sidebarVisible={sidebarVisible}></Sidebar>
     <main className="flex flex-col min-h-screen items-center">
       <Navbar burgerOnClick={() => { setSidebarVisible(!sidebarVisible) }} />
       <div className="w-full h-[80px]"></div>
       <div className="container px-10 flex w-full flex-col min-h-screen">
         <div>
-          <div className="bg-black w-full bg-center bg-cover h-[300px]" style={{ backgroundImage: `url(${config.API_URL.substring(0,config.API_URL.length-6)}storage/images/${image})` }}></div>
-          <p>{date.toLocaleDateString()}</p>
+          <div className="bg-black w-full bg-center bg-cover h-[300px]" style={{ backgroundImage: `url(${config.API_URL.substring(0,config.API_URL.length-6)}../storage/images/${image})` }}></div>
+          <p className="mt-3 text-xs mb-3">{date}</p>
           <p className="text-2xl font-bold">{title}</p>
-          <div dangerouslySetInnerHTML={{ __html: content }}></div>
+          <div className="normal" dangerouslySetInnerHTML={{ __html: content }}></div>
         </div>
       </div>
+      <div className="mb-24"></div>
 
-      <div className="w-full bg-black flex justify-center pt-5">
-        <div className="container px-5 flex w-full flex-col text-white">
-          <p className="font-bold mb-8">Footer</p>
-        </div>
-      </div>
+      <Footer/>
 
     </main>
-  </>
+    </>
+}
+
+export default function Post() {
+
+  return (<Suspense>
+    <Okay/>
+  </Suspense>
   );
 }

@@ -12,8 +12,8 @@ function Navbar (props: Props) {
     return <>
 
         <div className="fixed w-full h-1 z-40 bg-custom-blue-sky"></div>
-        <div className="shadow-sm z-30 w-full fixed flex bg-white justify-center pb-5">
-            <div className="container px-5">
+        <div className="shadow-md z-30 w-full fixed flex bg-white justify-center pb-5">
+            <div className="container xl:px-32 px-4 ">
                 <div className="w-full mt-5 h-10 flex">
                     <img src="./logo.png" width={100}></img>
                     <div className="w-[1px] h-full ml-16 bg-black"></div>

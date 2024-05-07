@@ -1,13 +1,13 @@
 "use client"
 
 import { usePathname } from 'next/navigation';
-import Image from "next/image";
 import Navbar from "../components/Navbar";
 import BigNews from "../components/BigNews";
 import Link from 'next/link';
 import NewsList from "@/components/NewsList";
 import { useEffect, useState } from "react";
 import Sidebar from '@/components/Sidebar';
+import Footer from '@/components/Footer';
 
 export default function Home() {
 
@@ -33,14 +33,9 @@ export default function Home() {
       <NewsList title="Populer" />
       <div className="mb-10"></div>
       <NewsList title="Terbaru" />
-      <div className="mb-10"></div>
+      <div className="mb-24"></div>
 
-
-      <div className="w-full bg-black flex justify-center pt-5">
-        <div className="container px-5 flex w-full flex-col text-white">
-          <p className="font-bold mb-8">Footer</p>
-        </div>
-      </div>
+      <Footer></Footer>
 
     </main>
   </>

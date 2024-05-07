@@ -6,6 +6,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import { IconInfoCircle } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation'
+import { notifications } from '@mantine/notifications';
 
 type Form = {
     username: string
@@ -38,7 +39,6 @@ export default function Login() {
         }
     })
 
-
     async function submitForm(v: Form) {
         const response = await fetch(Config.API_URL + "/users/login", {
             method: "POST",
@@ -51,11 +51,18 @@ export default function Login() {
 
         if (response.status != 200) {
             const jsonResponse:ErrorResponse = await response.json()
-            setDialogMsg(jsonResponse.message)
-            setAlertVisible(true)
+            notifications.show({
+                title:"Gagal Login",
+                color:"red",
+                message:"Username atau password salah!"
+            })
         } else {
             const jsonResponse:SuccessResponse = await response.json()
-            setAlertVisible(false)
+            notifications.show({
+                title:"Berhasil Login",
+                color:"green",
+                message:"Berhasil Login!"
+            })
             localStorage.setItem("token", jsonResponse.token)
             router.push("/admin")
         }

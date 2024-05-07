@@ -1,8 +1,12 @@
 "use client"
+
+import "./style.css"
 import Navbar from "../../components/Navbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faVolumeHigh, faVolumeXmark } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from 'react';
+import Sidebar from "@/components/Sidebar";
+import Footer from "@/components/Footer";
 
 export default function Live() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -25,21 +29,22 @@ export default function Live() {
     setIsPlaying(!isPlaying);
   }
 
-  return (
+  return (<>
+    <Sidebar setSidebarVisible={setSidebarVisible} sidebarVisible={sidebarVisible}></Sidebar>
     <main className="flex flex-col min-h-screen items-center">
       <Navbar burgerOnClick={() => { setSidebarVisible(!sidebarVisible) }} />
       <div className="w-full flex flex-col items-center h-screen">
         <div className="h-[80px] w-full">
         </div>
         <div className="container font-bold flex flex-col h-full w-full px-5">
-          <div className="">
+          <div className="mt-5">
             <p>Live Radio</p>
           </div>
           <div className="flex-1 flex flex-col items-center justify-center">
             <div className="h-[200px] w-full max-w-[600px] bg-gradient-to-r flex flex-col from-sky-500 to-indigo-500 rounded-lg shadow-2xl p-5 text-white">
               <div className="flex w-full">
                 <div className="flex-1">
-                  <p>GREENLINE AUDIO</p>
+                  <p>RAKOM LINTAS SUBAYANG</p>
                 </div>
                 <div className="flex-1 flex text-xs justify-end">
                   <div className="bg-red-500 rounded-lg p-1">
@@ -66,12 +71,9 @@ export default function Live() {
 
       </div>
       
-      <div className="w-full bg-black flex justify-center pt-5">
-        <div className="container px-5 flex w-full flex-col text-white">
-          <p className="font-bold mb-8">Footer</p>
-        </div>
-      </div>
+      <Footer/>
 
     </main>
+  </>
   );
 }
