@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 
 type Props = {
     title: string
+    query?: string
 }
 
-function NewsList(props: Props) {
+function ItemList(props: Props) {
 
     const [posts, setPosts] = useState([{
         title: "",
@@ -15,12 +16,12 @@ function NewsList(props: Props) {
         created_at: "",
         contentText: "",
         category: {
-            name:"waw"
+            name:""
         }
     }])
 
     async function load() {
-        const resp = await fetch(config.API_URL + "/posts", {
+        const resp = await fetch(config.API_URL + `/posts${props.query}`, {
             headers: {
                 "Accept": "application/json"
             }
@@ -36,27 +37,19 @@ function NewsList(props: Props) {
         load()
     }, [])
 
-    useEffect(()=>{
-        console.log(posts[0].category.name)
-    }, [posts])
-
     return <>
         <div className="container xl:px-32 px-4  flex w-full flex-col">
             <div className="flex w-full items-end">
                 <div className="">
                     <p className="font-bold mb-8 text-3xl">{props.title}</p>
                 </div>
-                <div className="flex-1 justify-end flex">
-                    <Link href="/semua" className="font-bold mb-8 text-sm">Lihat Semua &gt;</Link>
-                </div>
             </div>
             <div className="flex w-full">
-                <div className="flex flex-col sm:flex-row gap-6 max-w-full">
-                    { posts.map((v,i) => { 
-                        if (i > 4) return
+                <div className="flex gap-8 flex-wrap justify-center max-w-full">
+                    { posts.length > 0 ? posts.map((v,i) => { 
                         const responsive = ["","","hidden lg:block", "hidden xl:block", "hidden 2xl:block"]
 
-                        return <Link href={"/post?id="+v.id} key={i} className={"flex-1 "+responsive[i]}>
+                        return <Link href={"/post?id="+v.id} key={i} className={"flex-1 min-w-[300px] md:min-w-[300px] md:max-w-[300px]"}>
                         <div className="transition-all h-full p-4 bg-white rounded-2xl shadow-sm hover:shadow-2xl hover:mt-[-0.5rem]">
                             <span className="mb-3 inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">{v.category.name}</span>
                             <div className="bg-center bg-cover w-full h-36 rounded-2xl shadow-md mb-2" style={{ backgroundImage: "url("+ config.API_URL.substring(0,config.API_URL.length-6) + "../storage/images/" + v.thumbnail +")" }}></div>
@@ -64,7 +57,7 @@ function NewsList(props: Props) {
                             <p className="font-bold text-lg mb-2">{v.title}</p>
                             <p className="text-sm">{v.contentText.substring(0,100)}...<span className="font-bold ml-2">Selengkapnya</span></p>
                         </div>
-                    </Link> } ) }
+                    </Link> } ):"Tidak ada hasil."}
 
                     {/* <div className="flex-1">
                         <div className="transition-all p-4 bg-white rounded-2xl shadow-sm hover:shadow-2xl hover:mt-[-0.5rem]">
@@ -107,4 +100,4 @@ function NewsList(props: Props) {
     </>
 }
 
-export default NewsList;
+export default ItemList;

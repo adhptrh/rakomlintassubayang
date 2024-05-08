@@ -1,12 +1,22 @@
-  "use client"
-  import Navbar from "../../components/Navbar";
+"use client"
+
+import "./style.css"
+import Navbar from "../../components/Navbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faVolumeHigh, faVolumeXmark } from "@fortawesome/free-solid-svg-icons";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Sidebar from "@/components/Sidebar";
+import Footer from "@/components/Footer";
 
 export default function Live() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [sidebarVisible, setSidebarVisible] = useState(false)
+  useEffect(()=>{
+    if (localStorage.getItem("sidebar") == "open") {
+      setSidebarVisible(true)
+    }
+  }, [])
 
   const togglePlay = () => {
     const audio:HTMLAudioElement = document.getElementById("liveaudio") as HTMLAudioElement
@@ -18,21 +28,22 @@ export default function Live() {
     setIsPlaying(!isPlaying);
   }
 
-  return (
+  return (<>
+    <Sidebar setSidebarVisible={setSidebarVisible} sidebarVisible={sidebarVisible}></Sidebar>
     <main className="flex flex-col min-h-screen items-center">
-      <Navbar />
+      <Navbar burgerOnClick={() => { setSidebarVisible(!sidebarVisible) }} />
       <div className="w-full flex flex-col items-center h-screen">
         <div className="h-[80px] w-full">
         </div>
         <div className="container font-bold flex flex-col h-full w-full px-5">
-          <div className="">
+          <div className="mt-5">
             <p>Live Radio</p>
           </div>
           <div className="flex-1 flex flex-col items-center justify-center">
             <div className="h-[200px] w-full max-w-[600px] bg-gradient-to-r flex flex-col from-sky-500 to-indigo-500 rounded-lg shadow-2xl p-5 text-white">
               <div className="flex w-full">
                 <div className="flex-1">
-                  <p>GREENLINE AUDIO</p>
+                  <p>RAKOM LINTAS SUBAYANG</p>
                 </div>
                 <div className="flex-1 flex text-xs justify-end">
                   <div className="bg-red-500 rounded-lg p-1">
@@ -50,7 +61,7 @@ export default function Live() {
                   <div onClick={()=>{setIsMuted(!isMuted)}} className="flex cursor-pointer flex-col ml-4 h-full justify-end">
                       <FontAwesomeIcon icon={isMuted ? faVolumeXmark:faVolumeHigh} width={20}></FontAwesomeIcon>
                   </div>
-                  <audio id="liveaudio" src="https://pu.klikhost.com:8056/kbr"></audio>
+                  <audio id="liveaudio" src="https://a3.siar.us/listen/rakomlintassubayang/stream"></audio>
                 </div>
               </div>
             </div>
@@ -59,12 +70,9 @@ export default function Live() {
 
       </div>
       
-      <div className="w-full bg-black flex justify-center pt-5">
-        <div className="container px-5 flex w-full flex-col text-white">
-          <p className="font-bold mb-8">Footer</p>
-        </div>
-      </div>
+      <Footer/>
 
     </main>
+  </>
   );
 }

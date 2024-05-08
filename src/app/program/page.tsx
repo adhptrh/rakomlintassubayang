@@ -9,7 +9,7 @@ import Sidebar from "@/components/Sidebar";
 import ItemList from "@/components/ItemList";
 import Footer from "@/components/Footer";
 
-export default function Khabardesa() {
+export default function Semua() {
   
   const [sidebarVisible, setSidebarVisible] = useState(false)
   
@@ -27,13 +27,13 @@ export default function Khabardesa() {
         <div className="container px-5 flex w-full flex-col min-h-screen">
           <div className="pt-5">
 
-            <ItemList title="Khabar Desa" query="?cat=1"/>
+            <ItemList title="Program" query="?cat=3"/>
             
           </div>
         </div>
         <div className="mb-24"></div>
 
-      <Footer/>
+      <Footer />
 
     </main>
   </>
