@@ -48,7 +48,7 @@ function Okay() {
     <main className="flex flex-col min-h-screen items-center">
       <Navbar burgerOnClick={() => { setSidebarVisible(!sidebarVisible) }} />
       <div className="w-full h-[80px]"></div>
-      <div className="container px-10 flex w-full flex-col min-h-screen">
+      <div className="container xl:px-32 px-4  px-10 flex w-full flex-col min-h-screen">
         <div>
           <div className="bg-black w-full bg-center bg-cover h-[300px]" style={{ backgroundImage: `url(${config.API_URL.substring(0,config.API_URL.length-6)}../storage/images/${image})` }}></div>
           <p className="mt-3 text-xs mb-3">{date}</p>

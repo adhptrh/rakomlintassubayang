@@ -12,7 +12,6 @@ export default function Live() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [sidebarVisible, setSidebarVisible] = useState(false)
-
   useEffect(()=>{
     if (localStorage.getItem("sidebar") == "open") {
       setSidebarVisible(true)
@@ -62,7 +61,7 @@ export default function Live() {
                   <div onClick={()=>{setIsMuted(!isMuted)}} className="flex cursor-pointer flex-col ml-4 h-full justify-end">
                       <FontAwesomeIcon icon={isMuted ? faVolumeXmark:faVolumeHigh} width={20}></FontAwesomeIcon>
                   </div>
-                  <audio id="liveaudio" src="https://pu.klikhost.com:8056/kbr"></audio>
+                  <audio id="liveaudio" src="https://a3.siar.us/listen/rakomlintassubayang/stream"></audio>
                 </div>
               </div>
             </div>

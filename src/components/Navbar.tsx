@@ -15,7 +15,7 @@ function Navbar (props: Props) {
         <div className="shadow-md z-30 w-full fixed flex bg-white justify-center pb-5">
             <div className="container xl:px-32 px-4 ">
                 <div className="w-full mt-5 h-10 flex">
-                    <img src="./logo.png" width={100}></img>
+                    <Link href="/"><img src="./logo.png" width={100}></img></Link>
                     <div className="w-[1px] h-full ml-16 bg-black"></div>
                     <Link href="/"           className={"lg:flex hidden h-full ml-10 flex items-center transition-all text-sm " + (pathname == "/" ? "font-bold text-custom-blue-sky border-custom-blue-sky border-b-2":"text-slate-400")}>BERANDA</Link>
                     <Link href="/khabardesa" className={"lg:flex hidden h-full ml-10 flex items-center transition-all text-sm " + (pathname == "/khabardesa" ? "font-bold text-custom-blue-sky border-custom-blue-sky border-b-2":"text-slate-400")}>KHABAR DESA</Link>

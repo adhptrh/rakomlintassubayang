@@ -4,7 +4,6 @@ import config from '@/config';
 import { AppShell, Burger, Button, Group, Skeleton, Table, Modal, TextInput, FileInput, Combobox, useCombobox, InputBase, Input } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useRouter } from 'next/navigation';
-import { Router } from 'next/router';
 import { useEffect, useState } from 'react';
 import { RichTextEditor, Link } from '@mantine/tiptap';
 import { useEditor } from '@tiptap/react';
@@ -50,7 +49,6 @@ export default function Admin() {
     const [cdelModalOpened, cdelModal] = useDisclosure(false);
     const [postEditModalOpened, postEditModal] = useDisclosure(false);
     const router = useRouter()
-    const [nama, setNama] = useState('')
     const [deleteSelect, setDeleteSelect] = useState(0)
     const [editSelect, setEditSelect] = useState(0)
     const [comboboxVal, setComboboxVal] = useState<string>("");
@@ -200,6 +198,10 @@ export default function Admin() {
         content: ""
     })
 
+    function uploadFile() {
+
+    }
+
     return (
         <>
             <Modal opened={cdelModalOpened} onClose={cdelModal.close} centered title="Hapus Postingan">
@@ -299,6 +301,16 @@ export default function Admin() {
                                 </Combobox.Options>
                             </Combobox.Dropdown>
                         </Combobox>
+                    </div>
+                    <div className="flex items-end mb-3">
+                        <TextInput
+                            className='mr-2'
+                            label="Tambah Gambar dari URL"
+                            placeholder="Masukkan URL"
+                            /* key={postForm.key("title")}
+                            {...postForm.getInputProps("title")} */
+                        />
+                        <Button variant='gradient'>Tambah</Button>
                     </div>
                     <div>Konten</div>
                     <div className="mb-3">
@@ -520,12 +532,6 @@ export default function Admin() {
                 <AppShell.Navbar>
                     <button style={{ borderRightColor: "var(--mantine-color-blue-6)" }} className="flex w-full bg-slate-100 border-r-2 p-4">
                         Postingan
-                    </button>
-                    <button style={{ borderRightColor: "var(--mantine-color-blue-6)" }} className="flex w-full p-4 hover:border-r-2">
-                        Pilihan Editor
-                    </button>
-                    <button style={{ borderRightColor: "var(--mantine-color-blue-6)" }} className="flex w-full p-4 hover:border-r-2">
-                        Khabar Desa
                     </button>
                     <button style={{ backgroundColor: "var(--mantine-color-red-6)" }} onClick={logout} className="flex text-white w-full font-bold border-0 p-4">
                         Keluar
