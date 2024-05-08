@@ -10,7 +10,6 @@ export default function Home() {
       <div className="w-full h-[80px]"></div>
       <BigNews />
       <div className="mb-10"></div>
-
       <NewsList />
       <div className="mb-10"></div>
       <NewsList />

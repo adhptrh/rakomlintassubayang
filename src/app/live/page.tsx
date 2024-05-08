@@ -1,5 +1,5 @@
-"use client"
-import Navbar from "../../components/Navbar";
+  "use client"
+  import Navbar from "../../components/Navbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faVolumeHigh, faVolumeXmark } from "@fortawesome/free-solid-svg-icons";
 import { useState } from 'react';
