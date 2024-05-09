@@ -16,6 +16,21 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      animation: {
+        comeup: 'comeup 0.3s ease-in-out'
+      },
+      keyframes: {
+        comeup: {
+          '0%': {
+            marginTop: '50px',
+            opacity: '0'
+          },
+          '100%': {
+            marginTop: '0px',
+            opacity: '1'
+          },
+        }
+      }
     },
   },
   plugins: [],

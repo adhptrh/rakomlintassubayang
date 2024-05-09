@@ -30,12 +30,11 @@ function BigNews() {
 
   return <>
     <div className="container xl:px-32 px-4 flex w-full flex-col">
-      <img src="./logo2.png" className="max-w-[500px] mt-3"></img>
-      <div className="flex">
-        <Link href="https://www.greenradioline.id/"><img src="https://www.greenradioline.id/frontend/images/logo.png" className="w-[100px] mb-3"></img></Link>
-        <Link href="https://yapeka.or.id/"><img src="https://yapeka.or.id/wp-content/uploads/2023/07/Logo-Baru-YAPEKA-1-2048x552.png" className="w-[100px] mb-3"></img></Link>
+      <div className="flex bg-white rounded-2xl mt-8 p-4 pt-1 shadow-sm border-gray-200 border-[1px] justify-center items-center">
+        <Link href="https://www.greenradioline.id/"><img src="https://www.greenradioline.id/frontend/images/logo.png" className="w-[350px] mb-3 mr-10"></img></Link>
+        <Link href="https://yapeka.or.id/"><img src="./logo2.png" className="w-[250px] mt-3 rounded-2xl"></img></Link>
       </div>
-      <p className="font-bold mb-5 text-3xl">Pilihan Editor</p>
+      <p className="font-bold mt-8 mb-5 text-3xl">Pilihan Editor</p>
       <div className="w-full gap-x-6 flex mb-3 h-[300px] md:h-[450px] xl:h-[600px]">
         <div className="flex-1 h-full p-0 hover:p-4 rounded-2xl transition-all shadow-sm">
           <Link href={ posts.length > 0 ? "/post?id="+posts[0].id:"#" } className="relative w-full bg-black h-full rounded-2xl bg-center bg-cover flex flex-col justify-end" style={{ backgroundImage: "url("+ ((posts.length > 0) ? (config.API_URL.substring(0,config.API_URL.length-6) + "../storage/images/" + posts[0].thumbnail) : ("./thumb.jpeg")) +")" }}>
@@ -71,6 +70,7 @@ function BigNews() {
           </Link>
         </div>
       </div>
+      
     </div>
   </>
 }
