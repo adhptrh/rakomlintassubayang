@@ -23,7 +23,7 @@ export default function Program() {
     <Sidebar setSidebarVisible={setSidebarVisible} sidebarVisible={sidebarVisible}></Sidebar>
     <main className="flex flex-col min-h-screen items-center">
       <Navbar burgerOnClick={() => { setSidebarVisible(!sidebarVisible) }} />
-      <div className="w-full h-[80px]"></div>
+      <div className="w-full h-[100px]"></div>
         <div className="container px-5 flex w-full flex-col min-h-screen">
           <div className="pt-5">
 

@@ -10,10 +10,10 @@ import ItemList from "@/components/ItemList";
 import Footer from "@/components/Footer";
 
 export default function Event() {
-  
+
   const [sidebarVisible, setSidebarVisible] = useState(false)
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     if (localStorage.getItem("sidebar") == "open") {
       setSidebarVisible(true)
     }
@@ -23,17 +23,19 @@ export default function Event() {
     <Sidebar setSidebarVisible={setSidebarVisible} sidebarVisible={sidebarVisible}></Sidebar>
     <main className="flex flex-col min-h-screen items-center">
       <Navbar burgerOnClick={() => { setSidebarVisible(!sidebarVisible) }} />
-      <div className="w-full h-[80px]"></div>
+      <div className="w-full h-[100px]"></div>
+      <div className="animate-comeup flex flex-col w-full min-h-screen items-center">
         <div className="container px-5 flex w-full flex-col min-h-screen">
           <div className="pt-5">
 
-            <ItemList title="Event" query="?cat=2"/>
-            
+            <ItemList title="Event" query="?cat=2" />
+
           </div>
         </div>
         <div className="mb-24"></div>
 
-      <Footer/>
+        <Footer />
+      </div>
 
     </main>
   </>

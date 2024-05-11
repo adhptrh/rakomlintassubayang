@@ -1,8 +1,8 @@
 "use client"
 
 import config from '@/config';
-import { AppShell, Burger, Button, Group, Skeleton, Table, Modal, TextInput, FileInput, Combobox, useCombobox, InputBase, Input } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { AppShell, Burger, Button, Group, Box, ActionIcon, Modal, TextInput, FileInput, Combobox, useCombobox, InputBase, Input } from '@mantine/core';
+import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { RichTextEditor, Link } from '@mantine/tiptap';
@@ -14,6 +14,9 @@ import { IconColorPicker } from '@tabler/icons-react';
 import { Color } from '@tiptap/extension-color';
 import TextStyle from '@tiptap/extension-text-style';
 import { notifications } from '@mantine/notifications';
+import { showNotification } from '@mantine/notifications';
+import { DataTable } from 'mantine-datatable';
+import { IconSearch, IconX } from '@tabler/icons-react';
 
 type Category = {
     id: number
@@ -43,7 +46,12 @@ type CategoryReverse = {
     [key: string]: string;
 };
 
+const PAGE_SIZE = 15;
+
 export default function Admin() {
+    const [query, setQuery] = useState('');
+    const [debouncedQuery] = useDebouncedValue(query, 200);
+    const [page, setPage] = useState(1);
     const [opened, { toggle }] = useDisclosure();
     const [modalOpened, modal] = useDisclosure(false);
     const [cdelModalOpened, cdelModal] = useDisclosure(false);
@@ -53,6 +61,31 @@ export default function Admin() {
     const [editSelect, setEditSelect] = useState(0)
     const [comboboxVal, setComboboxVal] = useState<string>("");
     const [comboboxEditVal, setComboboxEditVal] = useState<string>("");
+
+    const [posts, setPosts] = useState([{
+        id: 0,
+        title: "",
+        contentHTML: "",
+        contentText: "",
+        category: {
+            id:0,
+        },
+        thumbnail: "",
+        created_at: ""
+    }])
+    
+    const [records, setRecords] = useState(posts.slice(0, PAGE_SIZE));
+
+    const postForm = useForm({
+        mode: 'uncontrolled',
+        initialValues: {
+            title: "",
+            contentHTML: "",
+            contentText: "",
+            category: 0,
+            thumbnail: new File([], '')
+        }
+    })
 
     const categoryMap: CategoryMap = {
         "1": "Khabar Desa",
@@ -76,28 +109,6 @@ export default function Admin() {
         onDropdownClose: () => comboboxEdit.resetSelectedOption(),
     })
 
-    const [posts, setPosts] = useState([{
-        id: 0,
-        title: "",
-        contentHTML: "",
-        contentText: "",
-        category: {
-            id:0,
-        },
-        thumbnail: "",
-        created_at: ""
-    }])
-
-    const postForm = useForm({
-        mode: 'uncontrolled',
-        initialValues: {
-            title: "",
-            contentHTML: "",
-            contentText: "",
-            category: 0,
-            thumbnail: new File([], '')
-        }
-    })
 
     const postEditForm = useForm({
         mode: 'uncontrolled',
@@ -177,6 +188,34 @@ export default function Admin() {
             }
         })
     }, [])
+
+        
+    useEffect(() => {
+        const from = (page - 1) * PAGE_SIZE;
+        const to = from + PAGE_SIZE;
+        setRecords(posts.slice(from, to));
+    }, [page]);
+
+        
+    useEffect(() => {
+        const from = (page - 1) * PAGE_SIZE;
+        const to = from + PAGE_SIZE;
+        setRecords(posts.slice(from, to));
+    }, [posts]);
+
+    useEffect(() => {
+        setRecords(
+          posts.filter(({ title }) => {
+            if (
+              debouncedQuery !== '' &&
+              !`${title}`.toLowerCase().includes(debouncedQuery.trim().toLowerCase())
+            )
+              return false;
+    
+            return true;
+          })
+        );
+      }, [debouncedQuery]);
 
     const editor = useEditor({
         extensions: [
@@ -542,21 +581,61 @@ export default function Admin() {
                         Postingan
                     </div>
                     <Button variant="gradient" className="mb-2" onClick={modal.open}>Tambah Postingan</Button>
-                    <Table>
-                        <Table.Thead>
-                            <Table.Tr>
-                                <Table.Th>No</Table.Th>
-                                <Table.Th>Tanggal Post</Table.Th>
-                                <Table.Th>Judul</Table.Th>
-                                <Table.Th>Aksi</Table.Th>
-                            </Table.Tr>
-                        </Table.Thead>
-                        <Table.Tbody>
-                            {posts.map((v, i) => <Table.Tr key={i}>
-                                <Table.Td>{i + 1}</Table.Td>
-                                <Table.Td>{new Date(v.created_at).toLocaleString()}</Table.Td>
-                                <Table.Td>{v.title}</Table.Td>
-                                <Table.Td className="flex justify-end">
+                    <DataTable
+                        withTableBorder
+                        borderRadius="sm"
+                        withColumnBorders
+                        striped
+                        highlightOnHover
+                        height={500}
+                        totalRecords={posts.length}
+                        recordsPerPage={PAGE_SIZE}
+                        page={page}
+                        onPageChange={(p) => setPage(p)}
+                        records={records.map(function(v, i) {
+                            return {
+                                index:i+1,
+                                id: v.id,
+                                created_at: new Date(v.created_at).toLocaleString(),
+                                title: v.title,
+                                category: v.category,
+                                contentHTML: v.contentHTML,
+                                contentText: v.contentText
+                            }
+                        })}
+                        columns={[
+                            {
+                                accessor: 'index',
+                                title: '#',
+                            },
+                            {
+                                accessor: 'created_at',
+                                title: 'Tanggal Post'
+                            },
+                            {
+                                accessor: 'title',
+                                title: 'Judul',
+                                filter: (
+                                    <TextInput
+                                      label="Judul"
+                                      placeholder="Cari judul..."
+                                      leftSection={<IconSearch size={16} />}
+                                      rightSection={
+                                        <ActionIcon size="sm" variant="transparent" c="dimmed" onClick={() => setQuery('')}>
+                                          <IconX size={14} />
+                                        </ActionIcon>
+                                      }
+                                      value={query}
+                                      onChange={(e) => setQuery(e.currentTarget.value)}
+                                    />
+                                  ),
+                                filtering: query !== ''
+                            },
+                            {
+                                accessor: 'post_id',
+                                title: 'Aksi',
+                                render: (v) => (
+                                    <>
                                     <Button
                                         color="orange"
                                         className="mr-2"
@@ -581,10 +660,13 @@ export default function Admin() {
                                             cdelModal.open()
                                         }}
                                     >Hapus</Button>
-                                </Table.Td>
-                            </Table.Tr>)}
-                        </Table.Tbody>
-                    </Table>
+                                    </>
+                                )
+                            }
+                        ]}
+                        >
+                        
+                    </DataTable>
 
                 </AppShell.Main>
             </AppShell>
