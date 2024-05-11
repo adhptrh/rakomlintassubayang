@@ -3,6 +3,7 @@ import "./globals.css";
 import '@mantine/core/styles.css';
 import '@mantine/tiptap/styles.css';
 import '@mantine/notifications/styles.css';
+import { GoogleAnalytics } from "@next/third-parties/google"
 import { Notifications } from '@mantine/notifications'
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 
@@ -28,9 +29,11 @@ export default function RootLayout({
       <body>
         <MantineProvider defaultColorScheme="light">
           <Notifications />
+          
           {children}
         </MantineProvider>
       </body>
+      <GoogleAnalytics gaId="G-NKJPFGFN2R"/>
     </html>
     );
 }

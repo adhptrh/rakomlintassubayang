@@ -22,6 +22,7 @@ export default function Home() {
 
   
   return (<>
+  
     <Sidebar setSidebarVisible={setSidebarVisible} sidebarVisible={sidebarVisible}></Sidebar>
 
     <main className="flex flex-col min-h-screen items-center">
