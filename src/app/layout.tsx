@@ -24,6 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="./favico.ico" type="image/x-icon"></link>
         <ColorSchemeScript defaultColorScheme="light" />
       </head>
       <body>
