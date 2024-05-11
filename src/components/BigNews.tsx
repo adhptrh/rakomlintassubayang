@@ -33,7 +33,7 @@ function BigNews() {
       <img src="./logo2.png" className="max-w-[500px] mt-3"></img>
       <div className="flex">
         <Link href="https://www.greenradioline.id/"><img src="https://www.greenradioline.id/frontend/images/logo.png" className="w-[100px] mb-3"></img></Link>
-        <Link href="https://yapeka.or.id/"><img src="https://yapeka.or.id/wp-content/uploads/2023/07/Logo-Baru-YAPEKA-1-2048x552.png" className="w-[100px] mb-3"></img></Link>
+        <Link href="https://yapeka.or.id/"><img src="./logo3.png" className="w-[100px] mb-3"></img></Link>
       </div>
       <p className="font-bold mb-5 text-3xl">Pilihan Editor</p>
       <div className="w-full gap-x-6 flex mb-3 h-[300px] md:h-[450px] xl:h-[600px]">
