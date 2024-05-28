@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import config from "@/config";
 import { useEffect, useState } from "react";
+import { reverse } from 'dns';
 
 type Props = {
     title: string
+    reverse?: boolean
 }
 
 function NewsList(props: Props) {
@@ -28,7 +30,11 @@ function NewsList(props: Props) {
 
         if (resp.status == 200) {
             const jsonResp = await resp.json()
-            setPosts([...jsonResp.data])
+            let xd = jsonResp.data
+            if (props.reverse) {
+                xd.reverse()
+            }
+            setPosts([...xd])
         }
     }
 
@@ -42,7 +48,7 @@ function NewsList(props: Props) {
 
     return <>
         <div className="container xl:px-32 px-4  flex w-full flex-col">
-            <div className="flex w-full items-end">
+            <div className="flex w-full items-end ">
                 <div className="">
                     <p className="font-bold mb-8 text-3xl">{props.title}</p>
                 </div>
@@ -51,7 +57,7 @@ function NewsList(props: Props) {
                 </div>
             </div>
             <div className="flex w-full">
-                <div className="flex flex-col sm:flex-row gap-6 max-w-full">
+                <div className="flex flex-col sm:flex-row gap-6 w-full max-w-full">
                     { posts.map((v,i) => { 
                         if (i > 4) return
                         const responsive = ["","","hidden lg:block", "hidden xl:block", "hidden 2xl:block"]

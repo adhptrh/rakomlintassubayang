@@ -20,7 +20,9 @@ function BigNews() {
 
     if (resp.status == 200) {
       const jsonResp = await resp.json()
-      setPosts([...jsonResp.data])
+      let xd = jsonResp.data
+      xd.reverse()
+      setPosts([...xd])
     }
   }
 
@@ -31,8 +33,13 @@ function BigNews() {
   return <>
     <div className="container xl:px-32 px-4 flex w-full flex-col">
       <div className="flex bg-white rounded-2xl mt-8 p-4 pt-1 shadow-sm border-gray-200 border-[1px] justify-center items-center">
-        <Link href="https://www.greenradioline.id/"><img src="https://www.greenradioline.id/frontend/images/logo.png" className="w-[350px] mb-3 mr-10"></img></Link>
-        <Link href="https://yapeka.or.id/"><img src="./logo3.png" className="w-[250px] mt-3 rounded-2xl"></img></Link>
+        <div className="flex flex-col justify-center items-center">
+          <Link href="https://yapeka.or.id/"><img src="./yapeka.jpeg" className="w-[250px] mt-3 rounded-2xl"></img></Link>
+          <div className="flex">
+            <Link href="https://yapeka.or.id/"><img src="./sponsor.jpeg" className="w-[250px] rounded-2xl"></img></Link>
+            <Link href="https://www.greenradioline.id/"><img src="https://www.greenradioline.id/frontend/images/logo.png" className="w-[100px] mb-3 mt-2 ml-1"></img></Link>
+          </div>
+        </div>
       </div>
       <p className="font-bold mt-8 mb-5 text-3xl">Pilihan Editor</p>
       <div className="w-full gap-x-6 flex mb-3 h-[300px] md:h-[450px] xl:h-[600px]">

@@ -32,10 +32,10 @@ export default function Home() {
         <BigNews />
         <div className="mb-10"></div>
 
+        <NewsList title="Terbaru" reverse={true}/>
+        <div className="mb-24"></div>
         <NewsList title="Populer" />
         <div className="mb-10"></div>
-        <NewsList title="Terbaru" />
-        <div className="mb-24"></div>
 
         <Footer></Footer>
       </div>
