@@ -17,15 +17,14 @@ export default function Footer() {
             </div>
             <div className="flex mr-24 mb-8 flex-col">
                 <p className="font-bold mb-4 text-xl">Media Social</p>
-                <Link href="#" className="mb-2 underline text-gray-200">Instagram</Link>
-                <Link href="#" className="mb-2 underline text-gray-200">Twitter</Link>
-                <Link href="#" className="mb-2 underline text-gray-200">Facebook</Link>
+                <Link href="https://www.instagram.com/rakomlintas_subayang/" className="mb-2 underline text-gray-200">Instagram</Link>
+                <Link href="https://www.youtube.com/@RakomLintasSubayang" className="mb-2 underline text-gray-200">Yotube</Link>
             </div>
             <div className="flex flex-col">
                 <p className="font-bold mb-4 text-xl">Kontak Kami</p>
-                <Link href="#" className="mb-2 text-gray-200">Whatsapp: +62</Link>
-                <Link href="#" className="mb-2 text-gray-200">Tel: +62</Link>
-                <Link href="#" className="mb-2 text-gray-200">Email: example@mail.com</Link>
+                <Link href="#" className="mb-2 text-gray-200">Whatsapp: +62 822-6193-9548</Link>
+                <Link href="#" className="mb-2 text-gray-200">Tel: +62 822-8411-2405</Link>
+                <Link href="#" className="mb-2 text-gray-200">Email: rakomlintassubayang2024@gmail.com</Link>
             </div>
         </div>
       </div>
