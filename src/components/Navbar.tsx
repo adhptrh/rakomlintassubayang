@@ -22,7 +22,7 @@ function Navbar (props: Props) {
                     <Link href="/event" className={"lg:flex hidden h-full ml-10 flex items-center transition-all text-sm " + (pathname == "/event" ? "font-bold text-custom-blue-sky border-custom-blue-sky border-b-2":"text-slate-400")}>EVENT</Link>
                     <Link href="/program" className={"lg:flex hidden h-full ml-10 flex items-center transition-all text-sm " + (pathname == "/program" ? "font-bold text-custom-blue-sky border-custom-blue-sky border-b-2":"text-slate-400")}>PROGRAM</Link>
                     <div className="flex-1 justify-end items-center flex">
-                        <Link href="/live" className="lg:flex hidden h-full font-bold text-red-500 border-2 border-red-500 flex items-center px-8 text-sm">LIVE RADIO</Link>
+                        <Link href="/live" className="lg:flex hidden h-full font-bold text-red-500 border-2 border-red-500 flex items-center px-8 text-sm">ON AIR</Link>
                         
                         <button onClick={()=>props.burgerOnClick()} className="flex lg:hidden h-[20px] font-bold border-2 border-l-0 border-r-0 border-black items-center flex-row justify-center w-[30px] text-sm">
                             <div className="h-[2px] w-[30px] bg-black"></div>

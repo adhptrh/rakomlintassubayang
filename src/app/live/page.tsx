@@ -48,7 +48,7 @@ export default function Live() {
                   </div>
                   <div className="flex-1 flex text-xs justify-end">
                     <div className="bg-red-500 rounded-lg p-1">
-                      NOW LIVE
+                      ON AIR
                     </div>
                   </div>
                 </div>
