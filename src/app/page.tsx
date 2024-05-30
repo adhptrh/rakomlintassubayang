@@ -8,6 +8,8 @@ import NewsList from "@/components/NewsList";
 import { useEffect, useState } from "react";
 import Sidebar from '@/components/Sidebar';
 import Footer from '@/components/Footer';
+import NewsListAudio from '@/components/NewsListAudio';
+import Sponsor from '@/components/Sponsor';
 
 export default function Home() {
 
@@ -29,6 +31,10 @@ export default function Home() {
       <Navbar burgerOnClick={() => { setSidebarVisible(!sidebarVisible) }} />
       <div className="w-full h-[100px]"></div>
       <div className="animate-comeup flex flex-col w-full min-h-screen items-center">
+        <Sponsor />
+        <div className="mb-10"></div>
+        <NewsListAudio title="Program Audio" reverse={true}/>
+        <div className="mb-10"></div>
         <BigNews />
         <div className="mb-10"></div>
 
