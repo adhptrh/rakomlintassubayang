@@ -29,6 +29,7 @@ type Post = {
     contentText: string
     category: Category,
     created_at: string,
+    audio?: string,
     thumbnail: string
 }
 
@@ -62,17 +63,7 @@ export default function Admin() {
     const [comboboxVal, setComboboxVal] = useState<string>("");
     const [comboboxEditVal, setComboboxEditVal] = useState<string>("");
 
-    const [posts, setPosts] = useState([{
-        id: 0,
-        title: "",
-        contentHTML: "",
-        contentText: "",
-        category: {
-            id:0,
-        },
-        thumbnail: "",
-        created_at: ""
-    }])
+    const [posts, setPosts] = useState<Post[]>([])
     
     const [records, setRecords] = useState(posts.slice(0, PAGE_SIZE));
 
@@ -83,7 +74,8 @@ export default function Admin() {
             contentHTML: "",
             contentText: "",
             category: 0,
-            thumbnail: new File([], '')
+            thumbnail: new File([], ''),
+            audio: new File([], ''),
         }
     })
 
@@ -92,6 +84,8 @@ export default function Admin() {
         "2": "Event",
         "3": "Program",
         "4": "Berita",
+        "5": "Audio",
+        "6": "Serba Serbi",
     }
 
     const categoryMapReverse: CategoryReverse = {
@@ -99,6 +93,8 @@ export default function Admin() {
         "Event": "2",
         "Program": "3",
         "Berita": "4",
+        "Audio": "5",
+        "Serba Serbi": "6",
     }
 
     const combobox = useCombobox({
@@ -257,12 +253,13 @@ export default function Admin() {
                 <form onSubmit={postForm.onSubmit(async val => {
                     const fdata = new FormData()
                     fdata.append("thumbnail", val.thumbnail)
+                    fdata.append("audio", val.audio)
                     fdata.append("title", val.title)
                     if (editor) {
                         fdata.append("contentHTML", editor.getHTML())
                         fdata.append("contentText", editor.getText())
                     }
-                    fdata.append("category", comboboxVal)
+                    fdata.append("category", categoryMapReverse[comboboxVal])
                     const resp = await fetch(config.API_URL + "/posts", {
                         method: "POST",
                         headers: {
@@ -337,10 +334,26 @@ export default function Admin() {
                                     <Combobox.Option value={"Berita"} key={"4"}>
                                         Berita
                                     </Combobox.Option>
+                                    <Combobox.Option value={"Audio"} key={"5"}>
+                                        Audio
+                                    </Combobox.Option>
+                                    <Combobox.Option value={"Serba Serbi"} key={"6"}>
+                                        Serba Serbi
+                                    </Combobox.Option>
                                 </Combobox.Options>
                             </Combobox.Dropdown>
                         </Combobox>
                     </div>
+                    {comboboxVal == "Audio" ? <>
+                    <FileInput
+                        className="mb-3"
+                        label="Sumber Audio"
+                        accept="audio/mp3,audio/wav,audio/x-m4a"
+                        placeholder="Input Audio"
+                        key={postForm.key("audio")}
+                        {...postForm.getInputProps("audio")}
+                    />
+                    </>:""}
                     <div className="flex items-end mb-3">
                         <TextInput
                             className='mr-2'
@@ -495,6 +508,12 @@ export default function Admin() {
                                     </Combobox.Option>
                                     <Combobox.Option value={"Berita"} selected={comboboxVal == "4"}>
                                         Berita
+                                    </Combobox.Option>
+                                    <Combobox.Option value={"Audio"} key={"5"}>
+                                        Audio
+                                    </Combobox.Option>
+                                    <Combobox.Option value={"Serba Serbi"} key={"6"}>
+                                        Serba Serbi
                                     </Combobox.Option>
                                 </Combobox.Options>
                             </Combobox.Dropdown>
