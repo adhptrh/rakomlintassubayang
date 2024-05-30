@@ -8,18 +8,20 @@ type Props = {
     reverse?: boolean
 }
 
+type Post = {
+    title: string,
+    thumbnail: string,
+    id: number,
+    created_at: string,
+    contentText: string,
+    category: {
+        name: string
+    }
+}
+
 function NewsList(props: Props) {
 
-    const [posts, setPosts] = useState([{
-        title: "",
-        thumbnail: "",
-        id: "",
-        created_at: "",
-        contentText: "",
-        category: {
-            name:"waw"
-        }
-    }])
+    const [posts, setPosts] = useState<Post[]>([])
 
     async function load() {
         const resp = await fetch(config.API_URL + "/posts", {
@@ -34,6 +36,7 @@ function NewsList(props: Props) {
             if (props.reverse) {
                 xd.reverse()
             }
+            xd = xd.filter((v:Post) => v.category.name != "Audio")
             setPosts([...xd])
         }
     }
@@ -41,10 +44,6 @@ function NewsList(props: Props) {
     useEffect(() => {
         load()
     }, [])
-
-    useEffect(()=>{
-        console.log(posts[0].category.name)
-    }, [posts])
 
     return <>
         <div className="container xl:px-32 px-4  flex w-full flex-col">
